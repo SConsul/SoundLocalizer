@@ -1,0 +1,14 @@
+LPF
+
+.include tl071.txt
+
+.subckt LPF IN OUT COM
+
+x1 COM 2 3 4 OUT tl071
+vdd 3 gnd dc 15 ac 0
+vee 4 gnd dc -15 ac 0
+r1 IN 2 15k
+r2 2 OUT 15k
+c1 2 OUT 1u
+
+.ends

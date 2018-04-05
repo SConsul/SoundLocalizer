@@ -1,0 +1,12 @@
+COMPONENTS TO MAKE
+
+--Band Pass Filter
+-- Delay Circuit
+--Phase Detector
+	--ZCD
+	--IA
+	--Half Wave Rectifier
+	--LPF (DC)
+--Comparator (LM111* or LM311) //Model file of 111 works
+--Integrator
+	--Capacitor + R -> Use BJT or Zener to limit

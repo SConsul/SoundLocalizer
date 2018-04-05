@@ -1,0 +1,28 @@
+LPF
+
+*.include tl071.txt
+
+.subckt LPF_active lpf_IN lpf_OUT lpf_COM
+x1 lpf_COM lpf_2 lpf_3 lpf_4 lpf_OUT tl071
+vdd lpf_3 lpf_COM dc 15 ac 0
+vee lpf_4 lpf_COM dc -15 ac 0
+r1 lpf_IN lpf_2 15k
+r2 lpf_2 lpf_OUT 15k
+c1 lpf_2 lpf_OUT .1u
+.ends
+
+.subckt LPF_passive lpf_IN lpf_OUT lpf_COM
+r1 lpf_IN lpf_OUT 15k
+c1 lpf_OUT lpf_COM .1u
+.ends
+
+vin i1 gnd sin(1 1 5k 0 0)
+V2 i2 gnd PULSE(0 1 0 2ns 2ns .1ms .2ms)
+*xdc1 i1 o1 gnd lpf_passive
+xdc2 i2 o2 gnd lpf_passive
+.control
+tran 0.001m 10.4ms 10m
+*plot v(o1) v(i1) 
+plot v(i2) v(o2)
+.endc
+.end

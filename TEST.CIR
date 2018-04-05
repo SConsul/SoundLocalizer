@@ -1,0 +1,19 @@
+Phase Detector
+*Zero Cross Detector
+
+.include lm311.txt
+
+x1 IN gnd 3 4 OUT gnd lm311
+vdd 3 gnd dc 15 ac 0
+vee 4 gnd dc -15 ac 0
+
+vin IN gnd sin(0 1 5k 0 0)
+*q1 c OUT 4
+*r1 3 c 20k
+
+.control
+tran 0.0001m 1ms
+plot v(OUT) 
+.endc
+.end
+

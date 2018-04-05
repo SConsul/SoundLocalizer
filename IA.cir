@@ -1,0 +1,147 @@
+IA (PSpice format)
+**************************************
+**  This file was created by TINA   **
+**         www.tina.com             ** 
+**      (c) DesignSoft, Inc.        **          
+**     www.designsoftware.com       **
+**************************************
+
+****** INA128E SUB-CIRCUIT
+* CONNECTIONS:          +
+*                       |   -
+*                       |   |   V+
+*                       |   |   |   V-
+*                       |   |   |   |   OUT
+*                       |   |   |   |   |   REF
+*                       |   |   |   |   |   |   RG1
+*                       |   |   |   |   |   |   |   RG2
+*                       |   |   |   |   |   |   |   |
+.SUBCKT INA128E_0          1   2   3   4   5   8   9  10
+*
+* ------------------------------------------------------------------------
+*|(C) COPYRIGHT TEXAS INSTRUMENTS INCORPORATED 2007. ALL RIGHTS RESERVED. |
+*|                                                                        |
+*|THIS MODEL IS DESIGNED AS AN AID FOR CUSTOMERS OF TEXAS INSTRUMENTS.    |
+*|NO WARRANTIES, EITHER EXPRESSED OR IMPLIED, WITH RESPECT TO THIS MODEL  |
+*|OR ITS FITNESS FOR A PARTICULAR PURPOSE IS CLAIMED BY TEXAS INSTRUMENTS |
+*|OR THE AUTHOR.  THE MODEL IS LICENSED SOLELY ON AN "AS IS" BASIS.  THE  |
+*|ENTIRE RISK AS TO ITS QUALITY AND PERFORMANCE IS WITH THE CUSTOMER.     |
+* ------------------------------------------------------------------------
+*
+* INA128E = A1_128E + A2_128E + A3_128E OP AMPS + PRECISION RESISTOR NETWORK
+* CREATED ON 12/11/96 AT 15:01
+*
+* REV.B  18 JUNE 97 NPA: MOVED LEGAL DISCLAIMER TO BEGINNING OF FILE
+*
+*
+***** A1_128E SUB-CIRCUIT
+* CONNECTIONS:          NON-INVERTING INPUT
+*                       |   INVERTING INPUT
+*                       |   |   POSITIVE POWER SUPPLY
+*                       |   |   |   NEGATIVE POWER SUPPLY
+*                       |   |   |   |   OUTPUT
+*                       |   |   |   |   |
+X1                     15  17   3   4  11   A1_128E
+*
+***** A2_128E SUB-CIRCUIT
+* CONNECTIONS:          NON-INVERTING INPUT
+*                       |   INVERTING INPUT
+*                       |   |   POSITIVE POWER SUPPLY
+*                       |   |   |   NEGATIVE POWER SUPPLY
+*                       |   |   |   |   OUTPUT
+*                       |   |   |   |   |
+X2                     15  16   3   4  12   A2_128E
+*
+***** A3_128E SUB-CIRCUIT
+* CONNECTIONS:          NON-INVERTING INPUT
+*                       |   INVERTING INPUT
+*                       |   |   POSITIVE POWER SUPPLY
+*                       |   |   |   NEGATIVE POWER SUPPLY
+*                       |   |   |   |   OUTPUT
+*                       |   |   |   |   |
+X3                     14  13   3   4   5   A3_128E
+*
+R1    11  13   40.0000K
+R2    13   5   39.996K
+R3    12  14   40.0000K
+R4    14   8   40.0000K
+CIN   13  14   4.0000PF
+*
+R1FB   9  11   25.000K
+CC1   17  11   5.0000PF
+R2FB  10  12   25.000K
+CC2   16  12   5.0000PF
+CG1    9   0   10.0000PF
+CG2   10   0   8.0000PF
+*
+RCE   17   9   20G
+*
+I1     3  16  DC  20.00E-6
+I2     3  17  DC  20.00E-6
+IB1CAN 3  42  DC  40.00E-9
+IB2CAN 3  46  DC  40.00E-9
+IBAL   0   4  DC  6.5E-6
+*
+D1    15  17      DX
+D2    15  16      DX
+*
+Q1    16  42  10  QX
+Q2    17  46   9  QX
+*
+V1     3  15  DC  1.700
+*
+******************************
+*              *
+* ADDITIONS FOR THE INA128E  *
+* (ENHANCED) MACROMODEL      *
+*              *
+******************************
+* INPUT PROTECTION
+RIN1 1   41 1K
+I11  41  42 .7MA
+S11  41  42 1 41 SP
+DI1  43  41 DX
+I12  4   43 DC .8MA
+S12  4   43 1 41 SM
+RIN2 2   45 1K
+I21  45  46 .7MA
+S21  45  46 2 45 SP
+DI2  47  45 DX
+I22  4   47 DC .8MA
+S22  4   47 2 45 SM
+*************************
+*         *
+* ANTI-INVERSION CLAMPS *
+*          *
+*************************
+VSET1 3 40 DC 2.0
+QSET1 4 40 42 QY
+VSET2 3 44 DC 2.0
+QSET2 4 44 46 QY
+.MODEL SP VSWITCH(RON=10 ROFF=100E3 VON=.7 VOFF=1)
+.MODEL SM VSWITCH(RON=10 ROFF=100E3 VON=-.7 VOFF=-1)
+.MODEL DX D(IS=1.0E-24)
+.MODEL QX NPN(IS=800.0E-18 BF=500)
+.MODEL QY PNP(IS=800.0E-18 BF=500)
+.ENDS
+
+
+.TEMP 27
+.AC DEC 20 10 1MEG
+.DC LIN VG2 0 1 10M
+
+.OPTIONS ABSTOL=1P ITL1=150 ITL2=20 ITL4=10 TRTOL=7 
+
+VG2         1 0 sin( 0 1 5K 0.025m 0)
+VG1         2 0 sin( 0 1 5K 0 0)
+VS6         0 6 12
+VS5         7 0 12
+R1          3 4 50K 
+XU3         1 2 7 6 VF3 0 4 3 INA128E_0
+
+.control
+tran 1U 500U
+plot v(vf3)
+
+.END
+

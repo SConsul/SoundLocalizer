@@ -1,0 +1,15 @@
+Integrator
+
+.model ZENER D(bv=4.7v)
+.include cd4007.txt
+.include tl071.txt
+
+.subckt INTEGRATOR IN OUT COM
+*  d g s b 
+m1 IN COM s s NMOS4007
+c1 s COM 10p
+x1 s OUT 3 4 OUT tl071
+vdd 3 COM dc 15 ac 0
+vee 4 COM dc -15 ac 0
+
+.ends

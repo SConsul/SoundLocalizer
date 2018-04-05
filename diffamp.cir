@@ -1,0 +1,33 @@
+Diff amp
+*.include ina128.txt
+.include tl071.txt
+
+
+.subckt IA ia_V2 ia_V1 ia_OUT ia_COM
+x1 ia_V1 ia_2 ia_3 ia_4 ia_5 tl071
+vdd2 ia_3 ia_COM dc 12 ac 0
+vee2 ia_4 ia_COM dc -12 ac 0
+r21 ia_2 ia_5 10k
+r31 ia_5 ia_12 1k
+r1 ia_2 ia_7 20k
+
+x2 ia_V2 ia_7 ia_8 ia_9 ia_10 tl071
+vdd2 ia_8 ia_COM dc 12 ac 0
+vee2 ia_9 ia_COM dc -12 ac 0
+r22 ia_7 ia_10 10k
+r32 ia_10 ia_11 1k
+r42 ia_11 ia_COM .5k
+r41 ia_12 ia_OUT .5k
+x3 ia_11 ia_12 ia_13 ia_14 ia_OUT tl071
+vdd3 ia_13 ia_COM dc 12 ac 0
+vee3 ia_14 ia_COM dc -12 ac 0
+.ends
+
+v1 i1 0 sin( 0 1 5K 0 0) 
+v2 i2 0 sin( 0 1 5K 0.025m 0)
+xia i2 i1 out 0 IA
+.control
+tran 0.001m 1m
+plot v(i2)-v(i1) v(out)
+.endc
+.end

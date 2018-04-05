@@ -1,0 +1,27 @@
+VT_Delay Block
+
+.include ua741.txt
+.include tsmc_spice_180nm.txt
+
+x1 1 2 3 4 5 ua741
+vdd 3 0 dc 12 ac 0
+vee 4 0 dc -12 ac 0
+
+c1 1 gnd 40pf
+r1 2 i 10k
+r2 2 5 10k
+
+m1 1 g i i CMOSP
+c2 g gnd 10pf
+vt g gnd -.7
+
+vin i gnd sin(0 1 1k 0 0)
+
+.dc vt -1.5 -0.5 0.1 
+
+.control
+plot {57.29*{vp(5)-vp(i)}}
+
+.endc
+.end
+

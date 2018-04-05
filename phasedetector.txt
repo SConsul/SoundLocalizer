@@ -1,0 +1,24 @@
+Phase Detector
+*Zero Cross Detector
+
+.include lm311.txt
+.include LPF.txt
+
+.subckt PSD IN OUT COM
+
+x1 1 COM 3 4 OUT COM lm311
+vdd 3 gnd dc 15 ac 0
+vee 4 gnd dc -15 ac 0
+
+.ends
+
+vin 1 0 sin(0 1 5k 0 0)
+x1 1 2 0 psd
+
+.tran 0.1 2ms
+.control
+run
+plot v(2)
+.endc
+.end
+

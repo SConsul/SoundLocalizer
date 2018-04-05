@@ -1,0 +1,71 @@
+Delay
+*************************************
+*Delay Block
+
+.include tl071.txt
+.include bfw10.txt
+
+.subckt delay delIN delOUT delCOM delT
+x1 del1 del2 del3 del4 delOUT tl071
+vdd del3 delCOM dc 15 ac 0
+vee del4 delCOM dc -15 ac 0
+c1 del1 delCOM 10n
+r1 del2 delIN 10k
+r2 del2 delOUT 10k
+j1 del1 delT delIN bfw10
+.ends
+
+*************************************
+va i_a gnd sin(0 .1 5k 0 0)
+*vb i_b gnd sin(0 .1 5k .025 0)
+vtest i_ref gnd sin(0 .1 5k 0 0)
+*************************************
+vt1 delg1 gnd sin(0.6 .1 5k 0 0)
+*vt2 delg2 gnd sin(-2.0 .1 5k 0 0)
+*************************************
+xdelA i_ref  Ao 0 delg1 delay
+xdelB Ao Bo 0 delg1 delay
+*xdelC i_b  Co 0 delg2 delay
+*xdelD Co Do 0 delg2 delay
+*************************************
+
+
+
+*************************************
+*Unity Gain HPF cutoff f=10.6Hz
+
+.subckt HPF1 hpf1_IN hpf1_OUT hpf1_COM
+x_hpf1   hpf1_1 hpf1_OUT hpf1_3 hpf1_4 hpf1_OUT tl071
+vdd_hpf1 hpf1_3 hpf1_COM dc 15 ac 0
+vee_hpf1 hpf1_4 hpf1_COM dc -15 ac 0
+r_hpf1   hpf1_1 hpf1COM 15k
+c_hpf1   hpf1_IN hpf1_1 1u
+.ends
+
+*************************************
+*Unity Gain LPF cutoff f=7.95kHz
+
+.subckt LPF1 lpf1_IN lpf1_OUT lpf1_COM
+x_lpf1   lpf1_COM lpf1_2 lpf1_3 lpf1_4 lpf1_OUT tl071
+vdd_lpf1 lpf1_3 lpf1_COM dc 15 ac 0
+vee_lpf1 lpf1_4 lpf1_COM dc -15 ac 0
+r1_lpf1  lpf1_IN lpf1_2 10k
+r2_lpf1  lpf1_2 lpf1_OUT 10k
+c_lpf1   lpf1_2 lpf1_OUT 2n
+.ends
+
+*************************************
+
+*************************************
+*xhpf Bo B_lp 0 HPF1
+*xlpf1 B_lp B_bp 0 LPF1
+*xhpf Do D_lp 0 HPF1
+*xlpf1 D_lp D_bp 0 LPF1
+
+
+.control
+run
+tran 0.001m 1.4ms 1m
+plot v(Ao) v(Bo) v(i_ref)
+.endc
+.end

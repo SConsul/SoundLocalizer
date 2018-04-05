@@ -1,0 +1,38 @@
+PSD (with multiplier)
+
+.model sigmult mult(out_gain=1.0)
+.include tl071.txt
+
+va a gnd sin(0 .1 5k 0 0)
+vb1 b1 gnd sin(0 .1 5k 0 0)
+vb2 b2 gnd sin(0 .1 5k .05m 0)
+a1 [a b1] m1 sigmult
+a2 [a b2] m2 sigmult
+
+*************************************
+*LPF
+
+.subckt LPF_active lpf_IN lpf_OUT lpf_COM
+x1 lpf_COM lpf_2 lpf_3 lpf_4 lpf_OUT tl071
+vdd lpf_3 lpf_COM dc 15 ac 0
+vee lpf_4 lpf_COM dc -15 ac 0
+r1 lpf_IN lpf_2 15k
+r2 lpf_2 lpf_OUT 15k
+c1 lpf_2 lpf_OUT .05u
+.ends
+
+.subckt LPF_passive lpf_IN lpf_OUT lpf_COM
+r1 lpf_IN lpf_OUT 15k
+c1 lpf_OUT lpf_COM .05u
+.ends
+
+*************************************
+
+x1dc m1 m1dc 0 LPF_passive
+X2dc m2 m2dc 0 LPF_passive
+
+.control
+tran 0.001m 3ms 0m
+plot V(m1) V(m1dc) 
+.endc
+.end

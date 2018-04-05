@@ -1,0 +1,35 @@
+Sound Localizer
+
+.include tl071.txt
+.include delayblock.txt
+.include LPF.txt
+.include phasedetector.txt //
+.include integrator.txt //
+
+v1 1 0 sin(0 1 5k 0 0)
+v2 2 0 sin(0 1 5k 0.025m 0) 
+*v2 delayed by pi/4 rad == 0.025m
+
+x_del11 2 3 14 0 delay_cir 
+x_del12 3 4 14 0 delay_cir 
+x_del21 2 5 14 0 delay_cir 
+x_del22 5 6 14 0 delay_cir 
+
+x_pd1 4 7 1 psd
+x_pd2 6 8 1 psd
+
+x_lpf1 7 9 0 LPF
+x_lpf2 8 10 0 LPF
+
+xcom 9 10 11 12 13 tl071
+vdd 11 0 dc 15 ac 0
+vee 12 0 dc -15 ac 0
+
+xint 13 14 0 integrator
+
+.tran 1us 1ms zs
+.control
+run
+plot v(14)
+.endc
+.end
