@@ -1,0 +1,26 @@
+*Delay Block
+
+.include tl071.txt
+.include bfw10.txt
+
+.subckt delay delIN delOUT delCOM delT
+x1 del1 del2 del3 del4 delOUT tl071
+vdd del3 delCOM dc 15 ac 0
+vee del4 delCOM dc -15 ac 0
+c1 del1 delCOM 10n
+r1 del2 delIN 10k
+r2 del2 delOUT 10k
+j1 del1 g delIN bfw10
+.ends
+vtest i_b gnd sin(0 .1 5k 0 0)
+xdelA i_b  Ao 0 delg1 delay
+xdelB Ao Bo 0 delg1 delay
+xdelC i_b Co 0 delg2 delay
+xdelD Co Do 0 delg2 delay
+
+.control
+run
+tran 0.001m .1ms 0m
+plot v(Bo) v(test) 
+.endc
+.end

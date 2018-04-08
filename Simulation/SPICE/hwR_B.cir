@@ -1,0 +1,26 @@
+Half Wave Rectifier_A
+
+.include tl071.txt
+.include Diode_1N914.txt
+
+.subckt HWR hwr_IN hwr_OUT hwr_COM
+x1 hwr_COM hwr_2 hwr_3 hwr_4 hwr_5 tl071
+vdd hwr_3 hwr_COM dc 12 ac 0
+vee hwr_4 hwr_COM dc -12 ac 0
+r1_hwr hwr_IN hwr_2 10k
+d1_hwr hwr_2 hwr_5 1N914
+r2_hwr hwr_2 hwr_OUT 10k
+d2_hwr hwr_5 hwr_OUT 1N914
+*rl 6 0 1k
+.ends
+
+*vg hwr_COM 0 ac 0 dc 0
+xhwr i out 0 HWR
+vi i 0 dc 0 sin (0 1 100 0 0)
+rl out 0 1k
+.tran 0.1ms 40ms
+.control
+run
+plot v(out) v(i)
+.endc
+.end

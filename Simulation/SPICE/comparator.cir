@@ -1,0 +1,13 @@
+COMPARATOR
+.include tl071.txt
+
+va 1 0 sin(0 .05 5k 0 0)
+vdd 3 0 dc 12
+vee 4 0 dc -12
+xcomp 1 0 3 4 5 tl071
+.control
+run
+tran 0.001m 1.2ms 0m
+plot 10*v(1) v(5) 
+.endc
+.end

@@ -1,0 +1,31 @@
+LPF
+
+.include tl071.txt
+
+.subckt LPF_active lpf_IN lpf_OUT lpf_COM
+x1 lpf_COM lpf_2 lpf_3 lpf_4 lpf_OUT tl071
+vdd lpf_3 lpf_COM dc 15 ac 0
+vee lpf_4 lpf_COM dc -15 ac 0
+r1 lpf_IN lpf_2 15k
+r2 lpf_2 lpf_OUT 15k
+c1 lpf_2 lpf_OUT 1u
+.ends
+
+.subckt LPF1 lpf1_IN lpf1_OUT lpf1_COM
+x_lpf1   lpf1_COM lpf1_2 lpf1_3 lpf1_4 lpf1_OUT tl071
+vdd_lpf1 lpf1_3 lpf1_COM dc 15 ac 0
+vee_lpf1 lpf1_4 lpf1_COM dc -15 ac 0
+r1_lpf1  lpf1_IN lpf1_2 10k
+r2_lpf1  lpf1_2 lpf1_OUT 10k
+c_lpf1   lpf1_2 lpf1_OUT 2n
+.ends
+
+vin i1 gnd dc 0 ac 1
+xlpf i1 o1 gnd LPF_active
+.ac dec 10 1 .05Meg
+.control
+run
+plot {vdb(o1)} xlog
+.endc
+.end
+

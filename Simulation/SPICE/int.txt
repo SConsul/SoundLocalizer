@@ -1,0 +1,13 @@
+*INTEGRATOR
+
+.subckt INTEGRATOR IN OUT COM
+*   d g s b 
+*m1 IN COM s s NMOS4007
+*x1 s OUT 3 4 OUT tl071
+*vdd 3 COM dc 15 ac 0
+*vee 4 COM dc -15 ac 0
+r1 IN OUT 1k
+c1 OUT COM 1u
+vd OUT a dc -0.05
+dz a COM ZENER
+.ends

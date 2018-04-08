@@ -1,0 +1,4 @@
+*Comparator
+xcomp comp1 comp2 comp3 comp4 comp5 tl071
+vdd_c comp3 dc 15 ac 0
+vee_c comp4 dc -15 ac 0

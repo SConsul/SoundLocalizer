@@ -1,0 +1,29 @@
+Delay Block
+
+.include tl071.txt
+.include bfw10.txt
+
+x1 1 2 3 4 5 tl071
+vdd 3 gnd dc 15 ac 0
+vee 4 gnd dc -15 ac 0
+
+c1 1 gnd 10n
+r1 2 i 10k
+r2 2 5 10k
+
+j1 1 g i bfw10
+
+*vt g gnd dc -3 ac 1
+*vin i gnd ac 1
+*.ac dec 3 100 .1Meg
+
+vt g gnd sin(-3.5 1 5k 0 0)
+vin i gnd sin(0 1 5k 0 0)
+.control
+run
+tran 0.001m 1.4ms 1m
+plot v(i) v(5)
+*plot (vdb(5)) xlog
+*plot {57.29*vp(5)} xlog
+.endc
+.end

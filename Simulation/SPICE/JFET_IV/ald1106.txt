@@ -1,0 +1,8 @@
+ALD1106 NMOS
+
+*            d g s b v+
+.subckt 1106 1 2 3 4 5 params: vtn=0.0
+m1 1 2 3 4 ncg l=7.8e-6 w=0.138e-3 as=0.603e-8 ps=0.478e-3 ad=0.161e-8
++                                  nrd=.3 nrs=1 nrg=25 nrb=35
+dps 4 5 dps 0.8e-8
+.ends

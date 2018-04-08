@@ -1,0 +1,16 @@
+Buffer
+
+.include tl071.txt
+
+vtest in_ref gnd sin(0 .1 5k 0 0)
+
+x1 in_ref in_buff buff3 buff4 in_buff tl071
+vbuff_dd buff3 0 dc 15 ac 0
+vbuff_ee buff4 0 dc -15 ac 0
+
+.control
+run
+tran 0.001m 1.4ms 1m
+plot v(in_buff) v(in_ref)
+.endc
+.end

@@ -1,0 +1,24 @@
+HPF
+
+.include tl071.txt
+
+
+*Unity Gain HPF
+
+.subckt HPF hpf_IN hpf_OUT hpf_COM
+r_hpf   hpf_OUT hpf_COM 15k
+c_hpf   hpf_IN hpf_OUT 10u
+.ends
+
+
+vin i1 gnd dc 0 ac 1
+xhpf i1 o1 gnd HPF
+*r1 o1 gnd 15k
+*c1 i1 o1 1u
+.ac dec 10 1 .05Meg
+.control
+run
+plot {vdb(o1)} xlog
+.endc
+.end
+

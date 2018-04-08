@@ -1,0 +1,16 @@
+Multiplier
+
+.model sigmult mult(out_gain=2.0)
+.include tl071.txt
+
+va a gnd sin(0 1 5k 0 0)
+vb1 b1 gnd sin(0 1 5k 0 0)
+vb2 b2 gnd sin(0 1 5k -0.05m 0)
+a1 [a b1] m1 sigmult
+a2 [a b2] m2 sigmult
+
+.control
+tran 0.001m .6ms 0m
+plot V(a) V(m2) 
+.endc
+.end

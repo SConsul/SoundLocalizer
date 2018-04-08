@@ -1,0 +1,17 @@
+Family of Curves
+
+.include bfw10.txt
+
+*Usually, the order of terminals are
+*drain, gate, source and body respectively
+
+j1 d g gnd bfw10
+vgs g gnd dc -2.23V
+vds dummy gnd dc 1V
+vdummy dummy d dc 0V
+.control
+dc vds -0 .8 0.001 
+*vgs -2.4 -2.0 .1
+plot i(vdummy)
+.endc
+.end

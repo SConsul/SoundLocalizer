@@ -1,0 +1,23 @@
+Delay Block
+
+.include tl071.txt
+.include cd4007.txt
+
+.subckt delay_cir IN OUT VT COM
+
+x1 1 2 3 4 OUT tl071
+vdd 3 COM dc 15 ac 0
+vee 4 COM dc -15 ac 0
+
+c1 1 COM 4p
+r1 2 i 10k
+r2 2 5 10k
+
+*m1 1 VT IN IN PMOS4007
+m1 1 VT IN IN cmosp
+c2 VT COM 10p
+*vt VT COM -0.1
+
+vin IN COM ac 1
+
+.ends

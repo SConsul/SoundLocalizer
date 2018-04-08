@@ -1,0 +1,21 @@
+MOS_IV
+
+.include ald1106.txt
+
+*Usually, the order of terminals are
+*drain, gate, source and body respectively
+
+*m1 d g 0 0 ALD1106
+m1 d g 0 0 
+vgs g gnd dc 2.0
+vds dummy gnd dc .2V
+vdummy dummy d dc 0V
+.control
+*dc vgs -2.5 -1.9 .002 vds -1 1 0.2 
+dc vgs -.5 5 0.01 vds 0.2 1 0.8
+plot i(vdummy)
+.endc
+.end
+
+** at vgs swing from -2.8 to 0 Rds varies from 15k to 195
+

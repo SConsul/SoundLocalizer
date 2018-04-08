@@ -1,0 +1,82 @@
+SL
+
+*************************************
+va i_a gnd sin(0 .1 5k 0 0)
+vb i_b gnd sin(0 .1 5k -.025ms 0)
+*vb leading by pi/4 rad == 0.025m
+*************************************
+
+*vt1 delg1 gnd sin(-2.2 .05 5k 0 0)
+*vt2 delg2 gnd sin(-1.0 .1 5k 0 0)
+
+*************************************
+*Delay Block
+
+.include tl071.txt
+.include bfw10.txt
+
+.subckt delay delIN delOUT delCOM delT
+x1 del1 del2 del3 del4 delOUT tl071
+vdd del3 delCOM dc 15 ac 0
+vee del4 delCOM dc -15 ac 0
+c1 del1 delCOM 10n
+r1 del2 delIN 10k
+r2 del2 delOUT 10k
+j1 del1 g delIN bfw10
+.ends
+
+xdelA i_b  Ao 0 delg1 delay
+xdelB Ao Bo 0 delg1 delay
+xdelC i_b Co 0 delg2 delay
+xdelD Co Do 0 delg2 delay
+*************************************
+.model sigmult mult(out_gain=10.0)
+
+a1 [i_a Bo] m1 sigmult
+a2 [i_a Do] m2 sigmult
+
+*************************************
+*Unity Gain LPF cutoff f=10.61Hz
+
+.subckt LPF_active lpf_IN lpf_OUT lpf_COM
+x1 lpf_COM lpf_2 lpf_3 lpf_4 lpf_OUT tl071
+vdd lpf_3 lpf_COM dc 15 ac 0
+vee lpf_4 lpf_COM dc -15 ac 0
+r1 lpf_IN lpf_2 15k
+r2 lpf_2 lpf_OUT 15k
+c1 lpf_2 lpf_OUT 1u
+.ends
+
+xlpf1 m1 comp1 0 LPF_active
+xlpf2 m2 comp2 0 LPF_active
+
+*************************************
+*Comparator
+xcomp comp1 comp2 comp3 comp4 comp5 tl071
+vdd_c comp3 dc 15 ac 0
+vee_c comp4 dc -15 ac 0
+
+*************************************
+*Integrator
+.model ZENER D(bv=2.25v)
+.subckt INTEGRATOR IN OUT COM
+r1 IN OUT 1k
+c1 OUT COM 1u
+vd OUT a dc -0.05
+dz a COM ZENER
+.ends
+
+*vset1 comp5 0 PULSE(-15 0 2ns 2ns 2ns .2ms .2ms)
+xint1 comp5 delg1 0 INTEGRATOR
+
+*vset2 comp5 0 PULSE(15 0 2ns 2ns 2ns .2ms .2ms)
+xint1 comp5 delg2 0 INTEGRATOR
+
+*************************************
+
+.control
+run
+tran 0.001m .1ms 0m
+plot v(delg1) v(delg2) 
+.endc
+.end
